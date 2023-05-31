@@ -1,0 +1,9 @@
+right button was pressed 0 times.
+left button was pressed 0 times.
+reset button was pressed 0 times.
+A button was pressed 0 times.
+B button was pressed 0 times.
+arm down (left trigger) was pressed 0 times.
+arm up (right trigger) was pressed 0 times.
+wrist left (left bumper) was pressed 0 times.
+wrist right (right bumper) was pressed 0 times.
