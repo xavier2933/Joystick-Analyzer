@@ -17,7 +17,7 @@ class joystick {
         int numOccurences(int);
         void mapValues();
         void readFile(string);
-        void writeFile(string);   
+        void writeFile(string, string);   
         vector<vector<double> > result;
         map<int, string> map;
 };

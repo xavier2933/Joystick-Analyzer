@@ -26,5 +26,5 @@ int main(int argc, char* argv[]) {
     // read, map, analyze, then write
     joy.readFile(inFileName);
     joy.mapValues();
-    joy.writeFile(outFileName);
+    joy.writeFile(inFileName, outFileName);
 }

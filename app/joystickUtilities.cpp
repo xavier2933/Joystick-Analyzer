@@ -90,7 +90,7 @@ int joystick::numOccurences(int index)
         for (int i = 0; i < result.size(); i++) 
         {
             // count number of times button is pressed
-            if(result[i][index] != 0)
+            if(result[i][index] != 0 && result[i-1][index] == 0)
             {
                 count++;
             }
@@ -101,11 +101,14 @@ int joystick::numOccurences(int index)
 }
 
 // writes data to file and command line, calls numOccurances to get data to write
-void joystick::writeFile(string name)
+void joystick::writeFile(string inName, string outName)
 {
     ofstream file;
-    file.open(name);
+    file.open(outName);
     int temp = 0;
+
+    // print where data came from
+    file << "##### Generated from " << inName  << " #####" << endl;
 
     for(int i = 0; i < result[0].size(); i++)
     {
