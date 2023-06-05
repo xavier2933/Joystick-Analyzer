@@ -12,33 +12,33 @@ void joystick::mapValues()
     if(result[0].size() == 19)
     {
         // axes
-        map[3] = "right button";
-        map[4] = "left button";
-        map[7] = "reset button";
+        joyMap[3] = "right button";
+        joyMap[4] = "left button";
+        joyMap[7] = "reset button";
         // buttons
-        map[8] = "A button";
-        map[9] = "B button";
-        map[11] = "arm down (left trigger)";
-        map[12] = "arm up (right trigger)";
-        map[13] = "wrist left (left bumper)";
-        map[14] = "wrist right (right bumper)";
+        joyMap[8] = "A button";
+        joyMap[9] = "B button";
+        joyMap[11] = "arm down (left trigger)";
+        joyMap[12] = "arm up (right trigger)";
+        joyMap[13] = "wrist left (left bumper)";
+        joyMap[14] = "wrist right (right bumper)";
     } 
     else if(result[0].size() == 23) 
     {
         // axes
-        map[2] = "right button";
-        map[3] = "left button";
-        map[7] = "reset button";
+        joyMap[2] = "right button";
+        joyMap[3] = "left button";
+        joyMap[7] = "reset button";
         // buttons
-        map[8] = "A button";
-        map[9] = "B button";
-        map[13] = "wrist left (left bumper)";
-        map[14] = "wrist right (right bumper)";
-        map[15] = "arm down (left trigger)";
-        map[16] = "arm up (right trigger)";
+        joyMap[8] = "A button";
+        joyMap[9] = "B button";
+        joyMap[13] = "wrist left (left bumper)";
+        joyMap[14] = "wrist right (right bumper)";
+        joyMap[15] = "arm down (left trigger)";
+        joyMap[16] = "arm up (right trigger)";
     } 
-    else { // return map -1 if joystick isnt recognized
-        map[-1] = "incompatible joystick";
+    else { // return joyMap -1 if joystick isnt recognized
+        joyMap[-1] = "incompatible joystick";
     }
 }
 
@@ -81,8 +81,8 @@ void joystick::readFile(string name)
 // counts number of times button is pressed
 int joystick::numOccurences(int index)
 {
-    // check if index has been mapped (to see if we care about this button)
-    if(map.count(index) == 0) 
+    // check if index has been joyMapped (to see if we care about this button)
+    if(joyMap.count(index) == 0) 
     {
         return -1;
     } else {
@@ -110,17 +110,17 @@ void joystick::writeFile(string name)
     for(int i = 0; i < result[0].size(); i++)
     {
         temp = numOccurences(i);
-        if(temp == -1) // this happens when value isnt mapped (we dont care about that button)
+        if(temp == -1) // this happens when value isnt joyMapped (we dont care about that button)
         {
             continue;
         } 
-        else if (map.count(-1) == 1) { 
+        else if (joyMap.count(-1) == 1) { 
             cout << "Incompatible joystick" << endl;
             break;   
         } 
         else {
-            cout << map[i] << " was pressed " << temp << " times. " << endl;
-            file << map[i] << " was pressed " << temp << " times." << endl;
+            cout << joyMap[i] << " was pressed " << temp << " times. " << endl;
+            file << joyMap[i] << " was pressed " << temp << " times." << endl;
         }    
     }
 

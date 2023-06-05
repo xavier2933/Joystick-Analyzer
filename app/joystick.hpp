@@ -19,5 +19,5 @@ class joystick {
         void readFile(string);
         void writeFile(string);   
         vector<vector<double> > result;
-        map<int, string> map;
+        map<int, string> joyMap;
 };
