@@ -1,0 +1,10 @@
+##### Generated from docs/longtest.csv #####
+right button was pressed 4 times.
+left button was pressed 7 times.
+reset button was pressed 0 times.
+A button was pressed 1 times.
+B button was pressed 3 times.
+wrist left (left bumper) was pressed 0 times.
+wrist right (right bumper) was pressed 6 times.
+arm down (left trigger) was pressed 11 times.
+arm up (right trigger) was pressed 10 times.
