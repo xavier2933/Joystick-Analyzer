@@ -9,7 +9,8 @@ using namespace std;
 
 void joystick::mapValues()
 {
-    if(result[0].size() == 19)
+    int size = result[0].size();
+    if(size == 19) // Wired controller
     {
         // axes
         joyMap[3] = "right button";
@@ -23,7 +24,7 @@ void joystick::mapValues()
         joyMap[13] = "wrist left (left bumper)";
         joyMap[14] = "wrist right (right bumper)";
     } 
-    else if(result[0].size() == 23) 
+    else if(size == 23) // Old wireless controller
     {
         // axes
         joyMap[2] = "right button";
@@ -36,7 +37,23 @@ void joystick::mapValues()
         joyMap[14] = "wrist right (right bumper)";
         joyMap[15] = "arm down (left trigger)";
         joyMap[16] = "arm up (right trigger)";
-    } 
+    }
+    else if(size == 24) // Xbox one wireless controller
+    {
+        // TODO: Test these values
+        // axes
+        joyMap[2] = "right button";
+        joyMap[3] = "left button";
+        joyMap[7] = "reset button";
+        joyMap[5] = "arm down (left trigger)";
+        joyMap[4] = "arm up (right trigger)";
+        // buttons
+        joyMap[8] = "A button";
+        joyMap[9] = "B button";
+        joyMap[13] = "wrist left (left bumper)";
+        joyMap[14] = "wrist right (right bumper)";
+        
+    }
     else { // return joyMap -1 if joystick isnt recognized
         joyMap[-1] = "incompatible joystick";
     }
