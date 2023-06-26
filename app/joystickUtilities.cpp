@@ -9,53 +9,64 @@ using namespace std;
 
 void joystick::mapValues()
 {
+    map<int, string> buttonNames; // DNY
+    buttonNames[1] = "Arm x";
+    buttonNames[2] = "Arm y";
+    buttonNames[3] = "Reset button";
+    buttonNames[4] = "A button";
+    buttonNames[5] = "B button";
+    buttonNames[6] = "Arm down (left trigger)";
+    buttonNames[7] = "Arm up (right trigger)";
+    buttonNames[8] = "Wrist left (left bumper)";
+    buttonNames[9] = "Wrist right (right bumper)";
+    buttonNames[190353254] = "Incompatible joystick";
+
     int size = result[0].size();
     if(size == 19) // Wired controller
     {
         // axes
-        joyMap[3] = "right button";
-        joyMap[4] = "left button";
-        joyMap[7] = "reset button";
+        joyMap[3] = buttonNames[1];
+        joyMap[4] = buttonNames[2];
+        joyMap[7] = buttonNames[3];
         // buttons
-        joyMap[8] = "A button";
-        joyMap[9] = "B button";
-        joyMap[11] = "arm down (left trigger)";
-        joyMap[12] = "arm up (right trigger)";
-        joyMap[13] = "wrist left (left bumper)";
-        joyMap[14] = "wrist right (right bumper)";
+        joyMap[8] = buttonNames[4];
+        joyMap[9] = buttonNames[5];
+        joyMap[11] = buttonNames[6];
+        joyMap[12] = buttonNames[7];
+        joyMap[13] = buttonNames[8];
+        joyMap[14] = buttonNames[9];
     } 
     else if(size == 23) // Old wireless controller
     {
-        // axes
-        joyMap[2] = "right button";
-        joyMap[3] = "left button";
-        joyMap[7] = "reset button";
+        // axesbuttonNames[] joyMap[2] = buttonNames[1];
+        joyMap[3] = buttonNames[2];
+        joyMap[7] = buttonNames[3];
         // buttons
-        joyMap[8] = "A button";
-        joyMap[9] = "B button";
-        joyMap[13] = "wrist left (left bumper)";
-        joyMap[14] = "wrist right (right bumper)";
-        joyMap[15] = "arm down (left trigger)";
-        joyMap[16] = "arm up (right trigger)";
+        joyMap[8] = buttonNames[4];
+        joyMap[9] = buttonNames[5];
+        joyMap[13] = buttonNames[6];
+        joyMap[14] = buttonNames[7];
+        joyMap[15] = buttonNames[8];
+        joyMap[16] = buttonNames[9];
     }
     else if(size == 24) // Xbox one wireless controller
     {
         // TODO: Test these values
         // axes
-        joyMap[2] = "right button";
-        joyMap[3] = "left button";
-        joyMap[7] = "reset button";
-        joyMap[5] = "arm down (left trigger)";
-        joyMap[4] = "arm up (right trigger)";
+        joyMap[2] = buttonNames[1];
+        joyMap[3] = buttonNames[2];
+        joyMap[7] = buttonNames[3];
+        joyMap[5] = buttonNames[6];
+        joyMap[4] = buttonNames[7];
         // buttons
-        joyMap[8] = "A button";
-        joyMap[9] = "B button";
-        joyMap[13] = "wrist left (left bumper)";
-        joyMap[14] = "wrist right (right bumper)";
+        joyMap[9] = buttonNames[4];
+        joyMap[10] = buttonNames[5];
+        joyMap[15] = buttonNames[8];
+        joyMap[16] = buttonNames[9];
         
     }
     else { // return joyMap -1 if joystick isnt recognized
-        joyMap[-1] = "incompatible joystick";
+        joyMap[-1] = buttonNames[190353254];
     }
 }
 
@@ -104,15 +115,28 @@ int joystick::numOccurences(int index)
         return -1;
     } else {
         int count = 0;
-        for (int i = 0; i < result.size(); i++) 
+        double temp = 0;
+        double prev = 0;
+        int j = 0;
+        for(int i = 1; i < result.size(); i++) 
         {
+            temp = result[i][index];
+            prev = result[j][index];
             // count number of times button is pressed
-            if(result[i][index] != 0 && result[i-1][index] == 0)
+            if(!(temp == 1.0 || temp == -1.0 || temp == 0.0 || temp == -0.0))
+            {
+                // cout << "nonzero found" << endl;
+                continue;
+            }
+            if(temp != prev)
             {
                 count++;
+                j=i;
+                continue;
             }
+            j++;
         }
-        return count;
+        return count/2;
     }
     
 }
