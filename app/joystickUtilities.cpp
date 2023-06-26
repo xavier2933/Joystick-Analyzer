@@ -9,7 +9,7 @@ using namespace std;
 
 void joystick::mapValues()
 {
-    map<int, string> buttonNames; // DNY
+    map<int, string> buttonNames; // So button names can be easily changed
     buttonNames[1] = "Arm x";
     buttonNames[2] = "Arm y";
     buttonNames[3] = "Reset button";
@@ -125,18 +125,19 @@ int joystick::numOccurences(int index)
             // count number of times button is pressed
             if(!(temp == 1.0 || temp == -1.0 || temp == 0.0 || temp == -0.0))
             {
-                // cout << "nonzero found" << endl;
+                // Skip if value is not a verified state, reduces overcounting
+                // Also skips j, leaving it as a pointer to the last regular val
                 continue;
             }
-            if(temp != prev)
+            if(temp != prev) // IF values consecutive values are different, increment count
             {
                 count++;
-                j=i;
+                j=i; // allows j to "catch up" again
                 continue;
             }
             j++;
         }
-        return count/2;
+        return count/2; // /2 to compensate for overcounting
     }
     
 }
@@ -164,7 +165,7 @@ void joystick::writeFile(string inName, string outName)
         } 
         else {
             cout << joyMap[i] << " was pressed " << temp << " times. " << endl;
-            file << joyMap[i] << " was pressed " << temp << " times." << endl;
+            file << joyMap[i] << " was pressed " << temp << " times. " << endl;
         }    
     }
 

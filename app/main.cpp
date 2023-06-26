@@ -10,16 +10,16 @@
 
 int main(int argc, char* argv[]) {
     // check if argc has the right # of params
-    if (argc < 3)
+    if (argc != 3)
     {
-        cout << "Missing file name(s)" << endl;
-        cout << "executable <in file name> <out file name>" << endl;
+        cout << "     INCORRECT USAGE     " << endl;
+        cout << "Usage: ./executable <in file name> <out file name>" << endl;
         return -1;
     }
 
     joystick joy;
 
-    // set corresponding variables form argv
+    // set corresponding variables from argv
     string inFileName = argv[1];
     string outFileName = argv[2];
 
