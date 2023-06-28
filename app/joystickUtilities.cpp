@@ -19,6 +19,8 @@ void joystick::mapValues()
     buttonNames[7] = "Arm up (right trigger)";
     buttonNames[8] = "Wrist left (left bumper)";
     buttonNames[9] = "Wrist right (right bumper)";
+    buttonNames[10] = "Drive forward";
+    buttonNames[11] = "turn right/left";
     buttonNames[190353254] = "Incompatible joystick";
 
     int size = result[0].size();
@@ -35,10 +37,12 @@ void joystick::mapValues()
         joyMap[12] = buttonNames[7];
         joyMap[13] = buttonNames[8];
         joyMap[14] = buttonNames[9];
+        joyMap[100] = "Wired Controller";
+
     } 
     else if(size == 23) // Old wireless controller
     {
-        // axesbuttonNames[] joyMap[2] = buttonNames[1];
+        joyMap[2] = buttonNames[1];
         joyMap[3] = buttonNames[2];
         joyMap[7] = buttonNames[3];
         // buttons
@@ -48,11 +52,14 @@ void joystick::mapValues()
         joyMap[14] = buttonNames[7];
         joyMap[15] = buttonNames[8];
         joyMap[16] = buttonNames[9];
+        joyMap[100] = "Old wireless controller";
     }
     else if(size == 24) // Xbox one wireless controller
     {
         // TODO: Test these values
         // axes
+        joyMap[0] = buttonNames[10];
+        joyMap[1] = buttonNames[11];
         joyMap[2] = buttonNames[1];
         joyMap[3] = buttonNames[2];
         joyMap[7] = buttonNames[3];
@@ -63,6 +70,7 @@ void joystick::mapValues()
         joyMap[10] = buttonNames[5];
         joyMap[15] = buttonNames[8];
         joyMap[16] = buttonNames[9];
+        joyMap[100] = "New wireless controller";
         
     }
     else { // return joyMap -1 if joystick isnt recognized
@@ -142,15 +150,60 @@ int joystick::numOccurences(int index)
     
 }
 
+pair<int, int> joystick::driveCounter(int index)
+{
+    int pos = 0;
+    int neg = 0;
+    double temp = 0;
+    double prev = 0;
+    int j = 0;
+    int tempcount = 0;
+    pair<int, int> numz;
+    for(int i = 1; i < result.size(); i++) 
+    {
+        temp = result[i][index];
+        prev = result[j][index];
+        // count number of times button is pressed
+        if(!(temp == 0.0 || temp == -0.0))
+        {
+            // Skip if value is not a verified state, reduces overcounting
+            // Also skips j, leaving it as a pointer to the last regular val
+            continue;
+        }
+        if((temp == -prev || temp == prev) && result[i-1][index] > 0) // IF values consecutive values are different, increment count
+        {
+            pos++;
+            j=i; // allows j to "catch up" again
+            continue;
+        }
+        if((temp == -prev || temp == prev) && result[i-1][index] < 0) // IF values consecutive values are different, increment count
+        {
+            neg++;
+            j=i; // allows j to "catch up" again
+            continue;
+        }
+        j++;
+    }
+    // pos = pos/2;
+    // neg = neg/2;
+    numz.first = pos;
+    numz.second = neg;
+    return numz; // /2 to compensate for overcounting
+    
+}
+
 // writes data to file and command line, calls numOccurances to get data to write
 void joystick::writeFile(string inName, string outName)
 {
     ofstream file;
     file.open(outName);
     int temp = 0;
+    int pos,neg;
 
     // print where data came from
     file << "##### Generated from " << inName  << " #####" << endl;
+    file << "Using controller: " << joyMap[100] << endl;
+    cout << "Using controller: " << joyMap[100] << endl;
 
     for(int i = 0; i < result[0].size(); i++)
     {
@@ -163,6 +216,13 @@ void joystick::writeFile(string inName, string outName)
             cout << "Incompatible joystick" << endl;
             break;   
         } 
+        else if ((joyMap.count(0) == 1 || joyMap.count(1) == 1) && (i == 0 || i ==1))
+        {
+            pair<int, int> result;
+            result = driveCounter(i);
+            cout << joyMap[i] << " was positive " << result.first << " times ";
+            cout << " and negative " << result.second << "times." << endl;
+        }
         else {
             cout << joyMap[i] << " was pressed " << temp << " times. " << endl;
             file << joyMap[i] << " was pressed " << temp << " times. " << endl;
