@@ -9,7 +9,7 @@ using namespace std;
 
 void joystick::mapValues()
 {
-    map<int, string> buttonNames; // So button names can be easily changed
+    unordered_map<int, string> buttonNames; // So button names can be easily changed
     buttonNames[1] = "Arm x";
     buttonNames[2] = "Arm y";
     buttonNames[3] = "Reset button";
@@ -59,9 +59,13 @@ void joystick::mapValues()
         // TODO: Test these values
         // axes
         joyMap[0] = buttonNames[10];
+        axesIndicesMap[0] = 1;
         joyMap[1] = buttonNames[11];
+        axesIndicesMap[1] = 1;
         joyMap[2] = buttonNames[1];
+        axesIndicesMap[2] = 1;
         joyMap[3] = buttonNames[2];
+        axesIndicesMap[3] = 1;
         joyMap[7] = buttonNames[3];
         joyMap[5] = buttonNames[6];
         joyMap[4] = buttonNames[7];
@@ -125,27 +129,22 @@ int joystick::numOccurences(int index)
         int count = 0;
         double temp = 0;
         double prev = 0;
-        int j = 0;
+        double baseState = result[1][index];
         for(int i = 1; i < result.size(); i++) 
         {
+            prev = result[i-1][index];
             temp = result[i][index];
-            prev = result[j][index];
-            // count number of times button is pressed
-            if(!(temp == 1.0 || temp == -1.0 || temp == 0.0 || temp == -0.0))
+            if(temp!=baseState)
             {
-                // Skip if value is not a verified state, reduces overcounting
-                // Also skips j, leaving it as a pointer to the last regular val
+                // Skip if value is not base state
                 continue;
             }
-            if(temp != prev) // IF values consecutive values are different, increment count
+            if(temp != prev) // IF consecutive values are different, increment count
             {
                 count++;
-                j=i; // allows j to "catch up" again
-                continue;
             }
-            j++;
         }
-        return count/2; // /2 to compensate for overcounting
+        return count;
     }
     
 }
@@ -216,12 +215,12 @@ void joystick::writeFile(string inName, string outName)
             cout << "Incompatible joystick" << endl;
             break;   
         } 
-        else if ((joyMap.count(0) == 1 || joyMap.count(1) == 1) && (i == 0 || i ==1))
+        else if ((joyMap.count(0) == 1 || joyMap.count(1) == 1) && (axesIndicesMap.count(i) == 1)) // i vals are hardcoded for axes with pos/neg
         {
             pair<int, int> result;
             result = driveCounter(i);
             cout << joyMap[i] << " was positive " << result.first << " times ";
-            cout << " and negative " << result.second << "times." << endl;
+            cout << " and negative " << result.second << " times." << endl;
         }
         else {
             cout << joyMap[i] << " was pressed " << temp << " times. " << endl;
