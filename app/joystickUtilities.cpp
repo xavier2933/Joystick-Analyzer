@@ -12,7 +12,8 @@ void joystick::mapValues()
     unordered_map<int, string> buttonNames; // So button names can be easily changed
     buttonNames[1] = "Arm x";
     buttonNames[2] = "Arm y";
-    buttonNames[3] = "Reset button";
+    buttonNames[3] = "Up button";
+    buttonNames[12] = "Down button";
     buttonNames[4] = "A button";
     buttonNames[5] = "B button";
     buttonNames[6] = "Arm down (left trigger)";
@@ -56,10 +57,10 @@ void joystick::mapValues()
     }
     else if(size == 24) // Xbox one wireless controller
     {
-        // TODO: Test these values
+        // TODO: joyMap 7 is arm up/down, need to change 
         // axes
-        joyMap[0] = buttonNames[10];
-        axesIndicesMap[0] = 1;
+        joyMap[0] = buttonNames[10]; 
+        axesIndicesMap[0] = 1; // wtf is this??
         joyMap[1] = buttonNames[11];
         axesIndicesMap[1] = 1;
         joyMap[2] = buttonNames[1];
@@ -187,7 +188,7 @@ pair<int, int> joystick::driveCounter(int index)
     // neg = neg/2;
     numz.first = pos;
     numz.second = neg;
-    return numz; // /2 to compensate for overcounting
+    return numz; // 
     
 }
 
@@ -215,7 +216,7 @@ void joystick::writeFile(string inName, string outName)
             cout << "Incompatible joystick" << endl;
             break;   
         } 
-        else if ((joyMap.count(0) == 1 || joyMap.count(1) == 1) && (axesIndicesMap.count(i) == 1)) // i vals are hardcoded for axes with pos/neg
+        else if ((joyMap.count(0) == 1 || joyMap.count(1) == 1) && (axesIndicesMap.count(i) == 1)) 
         {
             pair<int, int> result;
             result = driveCounter(i);
