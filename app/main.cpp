@@ -9,7 +9,7 @@
 #include "joystick.hpp"
 
 int main(int argc, char* argv[]) {
-    // check if argc has the right # of params
+    // check if argc has the right # of params !
     if (argc != 3)
     {
         cout << "     INCORRECT USAGE     " << endl;
